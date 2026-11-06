@@ -1,358 +1,422 @@
 <!DOCTYPE html>
-<html>
+<html lang="hu">
   <head>
-    <title>YouTube.com Clone</title>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#07131d">
+    <meta name="description" content="PLC- és robotprogramozás, ipari automatizálás és villamos tervezés. Megbízható mérnöki megoldások a koncepciótól az üzembe helyezésig.">
+    <title>Vertex Automation | PLC- és robotprogramozás</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        color-scheme: dark;
+        --ink: #f5f7f9;
+        --muted: #aab6c0;
+        --navy: #07131d;
+        --navy-soft: #0c1c29;
+        --orange: #f47b16;
+        --paper: #f4f6f7;
+        --text: #13202a;
+        --line: #dce2e6;
+        --content: 1160px;
+      }
 
-    <link rel="stylesheet" href="styles/general.css">
-    <link rel="stylesheet" href="styles/header.css">
-    <link rel="stylesheet" href="styles/video.css">
-    <link rel="stylesheet" href="styles/sidebar.css">
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--text);
+        font-family: "DM Sans", Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      a { color: inherit; }
+      .container { width: min(var(--content), calc(100% - 48px)); margin-inline: auto; }
+      .topbar {
+        position: absolute;
+        z-index: 2;
+        inset: 0 0 auto;
+        border-bottom: 1px solid rgb(255 255 255 / 9%);
+      }
+      .nav {
+        display: flex;
+        min-height: 76px;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--ink);
+        text-decoration: none;
+      }
+      .brand-mark {
+        color: var(--orange);
+        font-size: 39px;
+        font-weight: 800;
+        letter-spacing: -7px;
+        line-height: .8;
+        transform: skew(-12deg);
+      }
+      .brand-name { font-size: 15px; font-weight: 800; letter-spacing: .12em; line-height: 1.05; }
+      .brand-name span { display: block; font-size: 10px; font-weight: 600; letter-spacing: .2em; }
+      .nav-links { display: flex; align-items: center; gap: 34px; }
+      .nav-links a {
+        color: #e9edf0;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: color .2s ease;
+      }
+      .nav-links a:hover, .nav-links a:focus-visible { color: var(--orange); }
+      .nav-links .nav-cta { color: var(--orange); }
+      .menu-toggle {
+        display: none;
+        border: 1px solid rgb(255 255 255 / 24%);
+        border-radius: 6px;
+        background: transparent;
+        color: white;
+        font: inherit;
+        padding: 8px 11px;
+      }
+      .hero {
+        position: relative;
+        display: flex;
+        min-height: 610px;
+        align-items: center;
+        overflow: hidden;
+        background:
+          linear-gradient(90deg, #07131d 0%, rgb(7 19 29 / 96%) 27%, rgb(7 19 29 / 74%) 53%, rgb(7 19 29 / 24%) 100%),
+          linear-gradient(0deg, rgb(7 19 29 / 35%), transparent 55%),
+          url("https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=2000&q=85") center 48% / cover,
+          var(--navy);
+        color: var(--ink);
+      }
+      .hero-content { max-width: 680px; padding: 130px 0 78px; }
+      .eyebrow {
+        margin: 0 0 15px;
+        color: var(--orange);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+      }
+      h1 {
+        max-width: 660px;
+        margin: 0;
+        font-size: clamp(38px, 5.3vw, 66px);
+        font-weight: 800;
+        letter-spacing: -.045em;
+        line-height: 1.08;
+      }
+      .hero-copy {
+        max-width: 550px;
+        margin: 22px 0 29px;
+        color: #c3cdd5;
+        font-size: 17px;
+        line-height: 1.75;
+      }
+      .button {
+        display: inline-flex;
+        min-height: 48px;
+        align-items: center;
+        justify-content: center;
+        gap: 11px;
+        border: 0;
+        border-radius: 5px;
+        background: var(--orange);
+        color: #101820;
+        cursor: pointer;
+        font: inherit;
+        font-size: 14px;
+        font-weight: 800;
+        padding: 0 20px;
+        text-decoration: none;
+        transition: background .2s ease, transform .2s ease;
+      }
+      .button:hover { transform: translateY(-2px); background: #ff922f; }
+      .button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible {
+        outline: 3px solid #ffb267;
+        outline-offset: 3px;
+      }
+      .section { padding: 76px 0; }
+      .section-heading { max-width: 720px; margin-bottom: 32px; }
+      .section-heading .eyebrow { margin-bottom: 10px; }
+      h2 {
+        margin: 0;
+        color: var(--text);
+        font-size: clamp(27px, 3.2vw, 38px);
+        font-weight: 800;
+        letter-spacing: -.035em;
+        line-height: 1.18;
+      }
+      .section-intro { margin: 13px 0 0; color: #65717a; line-height: 1.7; }
+      .services-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+      .service-card {
+        min-height: 226px;
+        border: 1px solid #e4e9ec;
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: 0 8px 24px rgb(19 32 42 / 5%);
+        padding: 24px 21px;
+        transition: transform .2s ease, box-shadow .2s ease;
+      }
+      .service-card:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgb(19 32 42 / 9%); }
+      .service-icon { width: 35px; height: 35px; margin-bottom: 17px; color: var(--orange); }
+      .service-card h3 { margin: 0 0 9px; font-size: 16px; line-height: 1.35; }
+      .service-card p { margin: 0; color: #64717b; font-size: 13px; line-height: 1.65; }
+      .about {
+        position: relative;
+        overflow: hidden;
+        background:
+          linear-gradient(90deg, rgb(7 19 29 / 98%) 0%, rgb(7 19 29 / 96%) 48%, rgb(7 19 29 / 78%) 100%),
+          url("https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=1800&q=80") center / cover,
+          var(--navy);
+        color: var(--ink);
+      }
+      .about-inner { display: grid; grid-template-columns: .9fr 1.1fr; gap: 68px; align-items: center; }
+      .about h2 { color: var(--ink); }
+      .about-copy { margin: 17px 0 0; color: #bdc8d0; line-height: 1.8; }
+      .benefits { display: grid; gap: 15px; margin: 0; padding: 0; list-style: none; }
+      .benefits li { display: flex; align-items: flex-start; gap: 12px; color: #e3e8ec; font-size: 14px; line-height: 1.55; }
+      .check { flex: 0 0 auto; color: var(--orange); font-size: 19px; font-weight: 800; line-height: 1; }
+      .contact { background: #e9edef; }
+      .contact-layout { display: grid; grid-template-columns: .8fr 1.2fr; gap: 60px; align-items: start; }
+      .contact h2 { color: var(--ink); }
+      .contact-panel { border-radius: 10px; background: var(--navy-soft); color: var(--ink); padding: 36px; }
+      .contact-details { margin-top: 24px; }
+      .contact-details a { color: var(--ink); text-decoration-color: var(--orange); text-underline-offset: 4px; }
+      .contact-details p { margin: 10px 0; color: #c0cbd3; font-size: 14px; line-height: 1.6; }
+      .contact-form {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 13px;
+        border: 1px solid rgb(255 255 255 / 9%);
+        border-radius: 8px;
+        background: #102331;
+        padding: 24px;
+      }
+      .field { display: grid; gap: 7px; }
+      .field.full { grid-column: 1 / -1; }
+      .field label { color: #dce3e8; font-size: 12px; font-weight: 700; }
+      .field input, .field textarea {
+        width: 100%;
+        border: 1px solid #344957;
+        border-radius: 5px;
+        background: #1c3040;
+        color: white;
+        font: inherit;
+        font-size: 14px;
+        padding: 12px 13px;
+      }
+      .field input::placeholder, .field textarea::placeholder { color: #a0adb6; }
+      .field textarea { min-height: 112px; resize: vertical; }
+      .form-note { grid-column: 1 / -1; margin: 0; color: #aebbc4; font-size: 12px; line-height: 1.5; }
+      .contact-form .button { justify-self: start; }
+      .footer { background: var(--navy); color: #bac5cd; padding: 23px 0; }
+      .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+      .footer .brand-mark { font-size: 31px; }
+      .footer .brand-name { font-size: 12px; }
+      .footer .brand-name span { font-size: 8px; }
+      .footer p { margin: 0; font-size: 12px; line-height: 1.6; text-align: right; }
+      .footer a { color: inherit; text-decoration-color: var(--orange); text-underline-offset: 3px; }
+
+      @media (max-width: 820px) {
+        .hero { min-height: 570px; background-position: center, center, 60% center; }
+        .services-grid { grid-template-columns: repeat(2, 1fr); }
+        .about-inner, .contact-layout { grid-template-columns: 1fr; gap: 32px; }
+        .contact-layout { gap: 24px; }
+      }
+      @media (max-width: 560px) {
+        .container { width: min(var(--content), calc(100% - 36px)); }
+        .nav { min-height: 68px; }
+        .menu-toggle { display: inline-flex; }
+        .nav-links {
+          position: absolute;
+          top: 67px;
+          right: 18px;
+          left: 18px;
+          display: none;
+          align-items: stretch;
+          gap: 0;
+          border: 1px solid rgb(255 255 255 / 12%);
+          border-radius: 7px;
+          background: #0b1b27;
+          padding: 8px;
+        }
+        .nav-links.is-open { display: grid; }
+        .nav-links a { padding: 13px 12px; }
+        .hero { min-height: 570px; background-position: center, center, 64% center; }
+        .hero-content { padding: 120px 0 62px; }
+        .hero-copy { font-size: 15px; }
+        .section { padding: 58px 0; }
+        .services-grid { grid-template-columns: 1fr; gap: 12px; }
+        .service-card { min-height: 0; padding: 21px; }
+        .contact-panel { padding: 22px; }
+        .contact-form { grid-template-columns: 1fr; padding: 17px; }
+        .field.full, .form-note { grid-column: auto; }
+        .footer-inner { align-items: flex-start; flex-direction: column; }
+        .footer p { text-align: left; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+      }
+    </style>
   </head>
   <body>
-    <header class="header">
-      <div class="left-section">
-        <img class="hamburger-menu" src="icons/hamburger-menu.svg">
-        <img class="youtube-logo" src="icons/youtube-logo.svg">
-      </div>
-      <div class="middle-section">
-        <input class="search-bar" type="text" placeholder="Search">
-        <button class="search-button">
-          <img class="search-icon" src="icons/search.svg">
-          <div class="tooltip">Search</div>
-        </button>
-        <!-- Put position absolute inside position relative -->
-        <button class="voice-search-button">
-          <img class="voice-search-icon" src="icons/voice-search-icon.svg">
-          <div class="tooltip">Search with your voice</div>
-        </button>
-      </div>
-      <div class="right-section">
-        <div class="upload-icon-container">
-          <img class="upload-icon" src="icons/upload.svg">
-          <div class="tooltip">Create</div>
+    <header class="topbar">
+      <nav class="nav container" aria-label="Fő navigáció">
+        <a class="brand" href="#fooldal" aria-label="Vertex Automation – főoldal">
+          <span class="brand-mark" aria-hidden="true">V/</span>
+          <span class="brand-name">VERTEX<span>AUTOMATION</span></span>
+        </a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-links">Menü</button>
+        <div class="nav-links" id="nav-links">
+          <a href="#fooldal">Főoldal</a>
+          <a href="#szolgaltatasok">Szolgáltatások</a>
+          <a class="nav-cta" href="#kapcsolat">Kapcsolat</a>
         </div>
-        <div class="youtube-apps-icon-container">
-          <img class="youtube-apps-icon" src="icons/youtube-apps.svg">
-          <div class="tooltip">YouTube Apps</div>
-        </div>
-        <div class="notifications-icon-container">
-          <img class="notifications-icon" src="icons/notifications.svg">
-          <div class="notifications-count">3</div>
-          <div class="tooltip">Notifications</div>
-        </div>
-        <img class="current-user-picture" src="channel-pictures/my-channel.jpeg">
-      </div>
+      </nav>
     </header>
 
-    <nav class="sidebar">
-      <div class="sidebar-link">
-        <img src="icons/home.svg">
-        <div>Home</div>
-      </div>
-      <div class="sidebar-link">
-        <img src="icons/explore.svg">
-        <div>Explore</div>
-      </div>
-      <div class="sidebar-link">
-        <img src="icons/subscriptions.svg">
-        <div>Subscriptions</div>
-      </div>
-      <div class="sidebar-link">
-        <img src="icons/originals.svg">
-        <div>Originals</div>
-      </div>
-      <div class="sidebar-link">
-        <img src="icons/youtube-music.svg">
-        <div>YouTube Music</div>
-      </div>
-      <div class="sidebar-link">
-        <img src="icons/library.svg">
-        <div>Library</div>
-      </div>
-    </nav>
-
     <main>
-      <section class="video-grid">
-        <div class="video-preview">
-          <div class="thumbnail-row">
-            <img class="thumbnail" src="thumbnails/thumbnail-1.webp">
-            <div class="video-time">14:20</div>
-          </div>
-          <div class="video-info-grid">
-            <div class="channel-picture">
-              <img class="profile-picture" src="channel-pictures/channel-1.jpeg">
-            </div>
-            <div class="video-info">
-              <p class="video-title">
-                Talking Tech and AI with Google CEO Sundar Pichai!
-              </p>
-              <p class="video-author">
-                Marques Brownlee
-              </p>
-              <p class="video-stats">
-                3.4M views &#183; 6 months ago
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="video-preview">
-          <div class="thumbnail-row">
-            <img class="thumbnail" src="thumbnails/thumbnail-2.webp">
-            <div class="video-time">8:22</div>
-          </div>
-          <div class="video-info-grid">
-            <div class="channel-picture">
-              <img class="profile-picture" src="channel-pictures/channel-2.jpeg">
-            </div>
-            <div class="video-info">
-              <p class="video-title">
-                Try Not To Laugh Challenge #9
-              </p>
-              <p class="video-author">
-                Markiplier
-              </p>
-              <p class="video-stats">
-                19M views &#183; 4 years ago
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="video-preview">
-          <div class="thumbnail-row">
-            <img class="thumbnail" src="thumbnails/thumbnail-3.webp">
-            <div class="video-time">9:13</div>
-          </div>
-          <div class="video-info-grid">
-            <div class="channel-picture">
-              <img class="profile-picture" src="channel-pictures/channel-3.jpeg">
-            </div>
-            <div class="video-info">
-              <p class="video-title">
-                Crazy Tik Toks Taken Moments Before DISASTER
-              </p>
-              <p class="video-author">
-                SSSniperWolf
-              </p>
-              <p class="video-stats">
-                12M views &#183; 1 year ago
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="video-preview">
-          <div class="thumbnail-row">
-            <img class="thumbnail" src="thumbnails/thumbnail-4.webp">
-            <div class="video-time">22:09</div>
-          </div>
-          <div class="video-info-grid">
-            <div class="channel-picture">
-              <img class="profile-picture" src="channel-pictures/channel-4.jpeg">
-            </div>
-            <div class="video-info">
-              <p class="video-title">
-                The Simplest Math Problem No One Can Solve - Collatz Conjecture
-              </p>
-              <p class="video-author">
-                Veritasium
-              </p>
-              <p class="video-stats">
-                18M views &#183; 4 months ago
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="video-preview">
-          <div class="thumbnail-row">
-            <img class="thumbnail" src="thumbnails/thumbnail-5.webp">
-            <div class="video-time">11:17</div>
-          </div>
-          <div class="video-info-grid">
-            <div class="channel-picture">
-              <img class="profile-picture" src="channel-pictures/channel-5.jpeg">
-            </div>
-            <div class="video-info">
-              <p class="video-title">
-                Kadane's Algorithm to Maximum Sum Subarray Problem
-              </p>
-              <p class="video-author">
-                CS Dojo
-              </p>
-              <p class="video-stats">
-                519K views &#183; 5 years ago
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="video-preview">
-          <div class="thumbnail-row">
-            <img class="thumbnail" src="thumbnails/thumbnail-6.webp">
-            <div class="video-time">19:59</div>
-          </div>
-          <div class="video-info-grid">
-            <div class="channel-picture">
-              <img class="profile-picture" src="channel-pictures/channel-6.jpeg">
-            </div>
-            <div class="video-info">
-              <p class="video-title">
-                Anything You Can Fit In The Circle I’ll Pay For
-              </p>
-              <p class="video-author">
-                MrBeast
-              </p>
-              <p class="video-stats">
-                141M views &#183; 1 year ago
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="video-preview">
-          <div class="thumbnail-row">
-            <img class="thumbnail" src="thumbnails/thumbnail-7.webp">
-            <div class="video-time">10:13</div>
-          </div>
-          <div class="video-info-grid">
-            <div class="channel-picture">
-              <img class="profile-picture" src="channel-pictures/channel-7.jpeg">
-            </div>
-            <div class="video-info">
-              <p class="video-title">
-                Why Planes Don't Fly Over Tibet
-              </p>
-              <p class="video-author">
-                RealLifeLore
-              </p>
-              <p class="video-stats">
-                6.6M views &#183; 1 year ago
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="video-preview">
-          <div class="thumbnail-row">
-            <img class="thumbnail" src="thumbnails/thumbnail-8.webp">
-            <div class="video-time">7:12</div>
-          </div>
-          <div class="video-info-grid">
-            <div class="channel-picture">
-              <img class="profile-picture" src="channel-pictures/channel-8.jpeg">
-            </div>
-            <div class="video-info">
-              <p class="video-title">
-                Inside The World's Biggest Passenger Plane
-              </p>
-              <p class="video-author">
-                Tech Vision
-              </p>
-              <p class="video-stats">
-                3.7M views &#183; 10 months ago
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="video-preview">
-          <div class="thumbnail-row">
-            <img class="thumbnail" src="thumbnails/thumbnail-9.webp">
-            <div class="video-time">13:17</div>
-          </div>
-          <div class="video-info-grid">
-            <div class="channel-picture">
-              <img class="profile-picture" src="channel-pictures/channel-9.jpeg">
-            </div>
-            <div class="video-info">
-              <p class="video-title">
-                The SECRET to Super Human STRENGTH
-              </p>
-              <p class="video-author">
-                ThenX
-              </p>
-              <p class="video-stats">
-                20M views &#183; 3 years ago
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="video-preview">
-          <div class="thumbnail-row">
-            <img class="thumbnail" src="thumbnails/thumbnail-10.webp">
-            <div class="video-time">7:53</div>
-          </div>
-          <div class="video-info-grid">
-            <div class="channel-picture">
-              <img class="profile-picture" src="channel-pictures/channel-10.jpeg">
-            </div>
-            <div class="video-info">
-              <p class="video-title">
-                How The World's Largest Cruise Ship Makes 30,000 Meals Every Day
-              </p>
-              <p class="video-author">
-                Business Insider
-              </p>
-              <p class="video-stats">
-                14M views &#183; 1 year ago
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="video-preview">
-          <div class="thumbnail-row">
-            <img class="thumbnail" src="thumbnails/thumbnail-11.webp">
-            <div class="video-time">4:10</div>
-          </div>
-          <div class="video-info-grid">
-            <div class="channel-picture">
-              <img class="profile-picture" src="channel-pictures/channel-11.jpeg">
-            </div>
-            <div class="video-info">
-              <p class="video-title">
-                Dubai's Crazy Underwater Train and Other Things #Only in Dubai
-              </p>
-              <p class="video-author">
-                Destination Tips
-              </p>
-              <p class="video-stats">
-                3M views &#183; 1 year ago
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="video-preview">
-          <div class="thumbnail-row">
-            <img class="thumbnail" src="thumbnails/thumbnail-12.webp">
-            <div class="video-time">4:51</div>
-          </div>
-          <div class="video-info-grid">
-            <div class="channel-picture">
-              <img class="profile-picture" src="channel-pictures/channel-12.jpeg">
-            </div>
-            <div class="video-info">
-              <p class="video-title">
-                What would happen if you didn’t drink water? - Mia Nacamulli
-              </p>
-              <p class="video-author">
-                TED-Ed
-              </p>
-              <p class="video-stats">
-                12M views &#183; 5 years ago
-              </p>
-            </div>
+      <section class="hero" id="fooldal">
+        <div class="container">
+          <div class="hero-content">
+            <p class="eyebrow">Ipari automatizálás és vezérléstechnika</p>
+            <h1>PLC- és robotprogramozás. Megoldások az ipar számára.</h1>
+            <p class="hero-copy">Mérnöki szolgáltatások a koncepciótól a megvalósításig – tervezés, programozás, kivitelezés és üzembe helyezés.</p>
+            <a class="button" href="#kapcsolat">Beszéljünk a projektről <span aria-hidden="true">→</span></a>
           </div>
         </div>
       </section>
+
+      <section class="section" id="szolgaltatasok">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Szolgáltatásaink</p>
+            <h2>Komplex megoldások ipari automatizálási projektekhez.</h2>
+            <p class="section-intro">A tervezéstől az üzembe helyezésig segítünk, hogy gyártási folyamatai megbízhatóan és hatékonyan működjenek.</p>
+          </div>
+          <div class="services-grid">
+            <article class="service-card">
+              <svg class="service-icon" viewBox="0 0 40 40" fill="none" aria-hidden="true"><rect x="10" y="10" width="20" height="20" rx="2" stroke="currentColor" stroke-width="2"/><path d="M15 4v6m5-6v6m5-6v6M15 30v6m5-6v6m5-6v6M4 15h6m-6 5h6m-6 5h6m20-10h6m-6 5h6m-6 5h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <h3>PLC programozás</h3>
+              <p>Ipari vezérlőrendszerek fejlesztése, módosítása és üzembe helyezése.</p>
+            </article>
+            <article class="service-card">
+              <svg class="service-icon" viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M8 32h24M12 32V23l8-5 5 3 6-7M20 18l-3-7 6-4 5 4-2 7m-17 5 6-4m6-1 5 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="23" cy="7" r="2" stroke="currentColor" stroke-width="2"/><circle cx="31" cy="14" r="2" stroke="currentColor" stroke-width="2"/></svg>
+              <h3>Robotprogramozás</h3>
+              <p>Ipari robotok integrálása, programozása és optimalizálása.</p>
+            </article>
+            <article class="service-card">
+              <svg class="service-icon" viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="m20 5 15 8-15 8-15-8 15-8Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m5 20 15 8 15-8M5 27l15 8 15-8" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+              <h3>Automatizálás és tervezés</h3>
+              <p>Gépek és gyártósorok automatizálása, villamos és vezérléstechnikai tervezés.</p>
+            </article>
+            <article class="service-card">
+              <svg class="service-icon" viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="m23 4-14 19h10l-2 13 14-20H21l2-12Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+              <h3>Villamos kivitelezés</h3>
+              <p>Ipari vezérlőszekrények építése, telepítése és helyszíni villamos kivitelezés.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section about">
+        <div class="container about-inner">
+          <div>
+            <p class="eyebrow">Miért a Vertex Automation?</p>
+            <h2>Mérnöki szemlélet, gyakorlati megoldások.</h2>
+            <p class="about-copy">Minden projektben az üzembiztonságot, az átlátható együttműködést és a valódi igényekre szabott megoldásokat tartjuk szem előtt.</p>
+          </div>
+          <ul class="benefits">
+            <li><span class="check" aria-hidden="true">✓</span><span>Ipari tapasztalatra és naprakész technológiai tudásra építünk.</span></li>
+            <li><span class="check" aria-hidden="true">✓</span><span>Rugalmas, partnerközpontú együttműködést kínálunk.</span></li>
+            <li><span class="check" aria-hidden="true">✓</span><span>A tervezéstől a kivitelezésig támogatjuk projektjét.</span></li>
+            <li><span class="check" aria-hidden="true">✓</span><span>Megbízható, dokumentált munkavégzésre törekszünk.</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section contact" id="kapcsolat">
+        <div class="container contact-layout">
+          <div class="contact-panel">
+            <p class="eyebrow">Kapcsolat</p>
+            <h2>Van egy automatizálási projektje?</h2>
+            <p class="about-copy">Lépjen kapcsolatba velünk, és egyeztessük a projektje részleteit.</p>
+            <div class="contact-details">
+              <p><strong>E-mail</strong><br><a href="mailto:info@vertexautomation.hu">info@vertexautomation.hu</a></p>
+            </div>
+          </div>
+          <form class="contact-form" id="contact-form">
+            <div class="field">
+              <label for="name">Név *</label>
+              <input id="name" name="name" autocomplete="name" placeholder="Az Ön neve" required>
+            </div>
+            <div class="field">
+              <label for="email">E-mail cím *</label>
+              <input id="email" name="email" type="email" autocomplete="email" placeholder="nev@ceg.hu" required>
+            </div>
+            <div class="field full">
+              <label for="phone">Telefonszám</label>
+              <input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="+36 ...">
+            </div>
+            <div class="field full">
+              <label for="message">Üzenet / projekt rövid leírása *</label>
+              <textarea id="message" name="message" placeholder="Miben segíthetünk?" required></textarea>
+            </div>
+            <p class="form-note">Az üzenet elküldéséhez az Ön levelezőprogramja nyílik meg.</p>
+            <button class="button" type="submit">Üzenet előkészítése <span aria-hidden="true">→</span></button>
+          </form>
+        </div>
+      </section>
     </main>
+
+    <footer class="footer">
+      <div class="container footer-inner">
+        <a class="brand" href="#fooldal" aria-label="Vertex Automation – vissza a főoldalra">
+          <span class="brand-mark" aria-hidden="true">V/</span>
+          <span class="brand-name">VERTEX<span>AUTOMATION</span></span>
+        </a>
+        <p>Ipari automatizálás · PLC- és robotprogramozás · Villamos tervezés<br><a href="mailto:info@vertexautomation.hu">info@vertexautomation.hu</a></p>
+      </div>
+    </footer>
+
+    <script>
+      const menuToggle = document.querySelector(".menu-toggle");
+      const navLinks = document.querySelector(".nav-links");
+
+      menuToggle.addEventListener("click", () => {
+        const isOpen = menuToggle.getAttribute("aria-expanded") === "true";
+        menuToggle.setAttribute("aria-expanded", String(!isOpen));
+        navLinks.classList.toggle("is-open", !isOpen);
+      });
+
+      navLinks.addEventListener("click", (event) => {
+        if (event.target.closest("a")) {
+          menuToggle.setAttribute("aria-expanded", "false");
+          navLinks.classList.remove("is-open");
+        }
+      });
+
+      document.querySelector("#contact-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        const message = [
+          `Név: ${formData.get("name")}`,
+          `E-mail: ${formData.get("email")}`,
+          `Telefonszám: ${formData.get("phone") || "nincs megadva"}`,
+          "",
+          "Projekt:",
+          formData.get("message"),
+        ].join("\n");
+        const subject = encodeURIComponent(`Érdeklődés – ${formData.get("name")}`);
+        window.location.href = `mailto:info@vertexautomation.hu?subject=${subject}&body=${encodeURIComponent(message)}`;
+      });
+    </script>
   </body>
 </html>
